@@ -1,436 +1,366 @@
-#  SQL Analytics for TCS Logistics – Karachi Branch  
+<div align="center">
 
-**Optimizing Courier Operations, Delivery SLAs, and Payment Reconciliation through Data-Driven Insights**
+# TCS Logistics — Karachi Branch
+### Operational Performance Optimization with SQL Server
 
-<img width="1109" height="624" alt="Cover Image" src="https://github.com/user-attachments/assets/afb28878-b56f-4b35-8884-4a3e11a0486b" />
+**Delivery SLA · Returns · Courier Workload · Warehouse Capacity · Payment Reconciliation · Shipment Tracking**
 
-<img width="3404" height="2662" alt="Dasjboard layout" src="https://github.com/user-attachments/assets/7cb91063-5de1-436b-845b-163785431105" />
+![SQL Server](https://img.shields.io/badge/SQL_Server-T--SQL-CC2927?style=for-the-badge)
+![Domain](https://img.shields.io/badge/Domain-Logistics_%26_Supply_Chain-B9102E?style=for-the-badge)
+![Analysis](https://img.shields.io/badge/Analysis-6_Business_Challenges-20252D?style=for-the-badge)
+![Data](https://img.shields.io/badge/Data-Synthetic_Case_Study-5D6774?style=for-the-badge)
 
----
+**SQL-based investigation of parcel operations, fulfillment exceptions and financial visibility using a simulated logistics dataset.**
 
-##  Introduction
+[Overview](#executive-summary) · [Data Model](#sql-database--data-model) · [Problems](#six-business-problems) · [SQL](#sql-analysis-highlights) · [Findings](#reported-findings--evidence-quality) · [Roadmap](#future-improvements)
 
-TCS Logistics – Karachi Branch is one of Pakistan’s busiest delivery hubs, managing thousands of parcels daily across diverse payment methods, delivery routes, and customer segments.  
-In high-volume logistics environments, even small inefficiencies can lead to significant operational costs, SLA breaches, and customer dissatisfaction.
+</div>
 
-This project uses **SQL-based analytics** to simulate a real-world diagnostic engagement for TCS Karachi.  
+<!-- Drag your banner image directly into GitHub's README editor ABOVE this line.
+     GitHub will create the hosted user-attachments image URL. -->
 
-By designing a normalized relational database and running targeted SQL queries, I investigated six critical operational areas:
-
-- Delivery performance and SLA compliance
-- Return rate patterns by payment method
-- Courier workload distribution and efficiency
-- Warehouse capacity utilization
-- Payment reconciliation status
-- Customer complaint triggers and tracking accuracy
-
-The analysis follows a **“What I Found → Therefore I Suggest”** framework, ensuring that each technical insight is paired with a clear, actionable business recommendation.  
-This approach bridges the gap between **data engineering** and **executive decision-making**, demonstrating how SQL can be leveraged not just for querying data, but for driving measurable business impact.
-
---- 
-
-## Objective
-
-The objective of this project is to analyze operational data from **TCS Logistics – Karachi Branch** using SQL to identify performance bottlenecks, quantify business risks, and recommend actionable improvements.  
-By simulating a real-world logistics environment with normalized relational data, the project aims to:
-
-- Detect inefficiencies in **delivery timelines**, **return rates**, **courier workload**, **warehouse utilization**, **payment reconciliation**, and **customer experience**.
-- Translate raw SQL query outputs into **business-ready insights** for decision-makers.
-- Demonstrate advanced SQL techniques — including joins, aggregations, window functions, CTEs, and conditional logic — in solving real operational challenges.
-- Provide a **data-driven foundation** for future BI enhancements such as Power BI dashboards, predictive analytics, and geospatial route optimization.
-
---- 
-
-##  Scope of the Project
-
-This project focuses on applying **SQL-based analytics** to evaluate and improve the operational performance of **TCS Logistics – Karachi Branch**.  
-The scope covers the **end-to-end logistics workflow**, from parcel booking to final delivery, with emphasis on identifying inefficiencies and recommending data-driven solutions.
-
-### Inclusions
-
-- **Data Modeling & Preparation**
-  
-  - Designing a normalized relational database for logistics operations.
-  - Structuring synthetic but realistic datasets for analysis.
-  - 
-- **Operational Performance Analysis**
-  
-  - Delivery SLA compliance and delay patterns.
-  - Return rate analysis by payment method and region.
-  - Courier workload distribution and efficiency metrics.
-  - Warehouse capacity utilization and surge handling.
-  - Payment reconciliation tracking for COD, Bank, and Card transactions.
-  - Customer complaint triggers and tracking accuracy.
-    
-- **SQL Techniques Demonstrated
-
-  - Joins, aggregations, and filtering.
-  - Window functions for ranking and performance metrics.
-  - Common Table Expressions (CTEs) for modular query design.
-  - Conditional logic (`CASE WHEN`) and date/time functions.
-- **Business Insight Generation**
-  - Translating query results into actionable recommendations.
-  - Quantifying potential business impact of proposed changes.
-
-### Exclusions
-
-- Real customer or operational data (synthetic dataset used for demonstration).
-- Implementation of operational changes (recommendations only).
-- Front-end application or live system integration.
-
-### Deliverables
-
-- **SQL Scripts** for each analysis module.
-- **Findings & Recommendations Report** in “What I Found → Therefore I Suggest” format.
-- **Repository Structure** with organized scripts, data, and visuals.
-- **Future Scope** section outlining potential BI and predictive analytics enhancements.
-
-
-##  Business Problems at TCS Logistics – Karachi Branch
-
-Through SQL-driven analysis of synthetic operational data, six critical business problems were identified that directly impact efficiency, cost, and customer satisfaction:
-
-1. **Delivery Delays**
-   
-   - The branch is failing to meet the 48-hour SLA target.  
-   - Average delay: **58 hours** per shipment.  
-   - Only **3%** of shipments recorded as on-time in the dataset.  
-   - Delays appear systemic, tied to hub cutoffs and linehaul schedules rather than last-mile issues.
-
-3. **High Return Rate**
-
-   - Overall return ratio: **26%** of shipments.  
-   - By payment method: Bank **31.25%**, Card **25%**, COD **22.73%**.  
-   - Non-COD methods show both higher returns and lower delivery success, indicating payment verification friction or low customer trust.
-
-4. **Courier Load Imbalance**
-    
-   - Parcel assignments are uneven across couriers.  
-   - Some couriers are overloaded, others underutilized.  
-   - Return rate: **26%**, Delivered: **52%**, with **22%** unaccounted (likely in-transit or cancelled).  
-   - Imbalance reduces efficiency and first-attempt delivery success.
-
-5. **Warehouse Overcapacity**
-    
-   - Designed capacity: **500 parcels/day**, but reported inflow sometimes exceeds 650.  
-   - Dataset extract shows only **2 parcels/day** with zero variance — likely filtered or incomplete.  
-   - Lack of surge tracking hides true operational stress.
-
-6. **Payment Reconciliation Issues**
-   
-   - Pending payments: Bank **25%**, COD **27.27%**, Card **0%** (but no completed transactions recorded for any method).  
-   - Indicates settlement delays, missing integration between courier deposits, bank feeds, and reporting systems.  
-   - Creates cash-flow strain and reconciliation backlog.
-
-7. **Customer Complaints – Tracking Errors**
-   
-   - Multiple shipments stuck in “In-Transit” for **4+ days** with no updates.  
-   - Duplicate records inflate workload metrics.  
-   - Affected shipments involve Bank and Card payments, increasing dispute risk.  
-   - Reduces transparency, trust, and customer satisfaction.
-
-## SQL Query Snapshots : 
-
-**Problem 1: Delivery Delays**
-
-<img width="1268" height="696" alt="1" src="https://github.com/user-attachments/assets/3090d96e-e664-456e-b0a4-7039f14a306d" />
-
-**Problem 2: Problem 2: High Return Rate**
-
-<img width="1153" height="649" alt="2" src="https://github.com/user-attachments/assets/32023b13-f2a4-4e40-9ac5-06ba42f9ee81" />
-
-**Problem 3 :  Courier Load Imbalance**
-
-<img width="1151" height="640" alt="3" src="https://github.com/user-attachments/assets/b57f46db-6852-439c-aa32-6002ccb2e97b" />
-
-**Problem 4 :   Warehouse Overcapacity**
-
-<img width="1022" height="575" alt="4" src="https://github.com/user-attachments/assets/48827911-07c3-4d33-bfa2-82e52d7b0014" />
-
-**Problem 5 :   Payment Reconciliation Issues**
-
-<img width="1024" height="561" alt="5" src="https://github.com/user-attachments/assets/23fa8fbd-3d66-4267-bbf4-ac9d221b2758" />
-
-**Problem 6 :   Customer Complaints**
-
-<img width="1026" height="560" alt="6" src="https://github.com/user-attachments/assets/5fe38b67-10ee-46d7-92ef-6f97627c113a" />
-
-##  Findings & Interpretations
-
-Below are the six key operational issues identified through SQL analysis of the Karachi branch dataset, along with my interpretations and recommended actions.
+> **Independence disclaimer:** This is an educational, independently developed case study using synthetic data and the TCS Karachi branch as a business scenario. The operational problems and metrics are not verified internal TCS results. It is not a sponsored or official TCS project.
+>
+> **Data validation notice:** The presentation reports some results from an expanded or modified dataset that **cannot be reproduced from the attached SQL script alone**. Reported presentation metrics are distinguished from directly inspectable source data below.
 
 ---
 
-### 1 Delivery Delays
+## Executive Summary
 
-**I found this:**  
+A logistics branch needs dependable insight into shipment turnaround, returns, assignment fairness, warehouse throughput and payment settlement. Even a simple relational model can reveal operational exceptions—but only when records, status definitions and KPI denominators are consistent.
 
-- Average delivery time is **58 hours**, exceeding the 48‑hour SLA.  
-- Only **3%** of shipments recorded as on‑time; **4%** flagged as delayed (metrics don’t sum to 100%, indicating filtered or incomplete data).  
-- Delays appear systemic — likely tied to **hub cut‑offs** and **linehaul schedules**, not just last‑mile inefficiencies.
+For this project, I created a **SQL Server relational model** representing customers, couriers, warehouses, parcels, shipments and payments. I then applied SQL queries to investigate six business questions related to fulfillment and financial operations.
 
-**Therefore I suggest:**  
+### My contribution
+- Designed six related operational tables using primary and foreign keys.
+- Populated the database with **demonstration records** for logistics transactions.
+- Investigated shipment duration, return outcomes, daily dispatch volume, payment status and prolonged in-transit shipments.
+- Documented proposed improvements in tracking, operational reporting and financial reconciliation.
+- Reviewed the original SQL and presentation for data-quality and measurement risks.
 
-- Enforce stricter **hub‑in / linehaul‑out cut‑offs**.  
-- Implement **milestone tracking** to catch SLA breaches early.  
-- Introduce **“at‑risk shipment” alerts** for proactive intervention.  
-- Standardize KPI definitions for **On‑Time%** and **Delay%**.
-
----
-
-### 2 High Return Rate
-
-**I found this:**  
-
-- Return rates by payment method: **Bank 31.25%**, **Card 25%**, **COD 22.73%**.  
-- Bank/Card also have lower delivery success than COD.  
-- Delivery% + Return% don’t sum to 100% — suggesting other statuses (in‑transit, cancelled) or incomplete data.  
-- Pattern indicates **payment verification friction** or **low customer trust** in prepaid methods.
-
-**Therefore I suggest:** 
-
-- Optimize Bank/Card payment flows with **instant confirmation** and **retry logic**.  
-- Enforce **address validation** at booking.  
-- Introduce **customer confirmations** via SMS/WhatsApp before dispatch.  
-- Capture **structured NDR reason codes** to reduce repeat returns.
+| Project attribute | Detail |
+|---|---|
+| **Role** | Data Analyst — SQL Portfolio Case Study |
+| **Technology** | Microsoft SQL Server / T-SQL |
+| **Industry context** | Courier & logistics |
+| **Scenario** | Karachi branch performance |
+| **Database** | `TCS_LogisticsDB` |
+| **Core tables** | 6 |
+| **Business questions** | 6 |
+| **Source records** | 25 customers, 25 couriers, 25 warehouses, 25 parcels, 25 shipments, 25 payments in the supplied INSERT blocks |
+| **Delivery** | SQL script + analysis presentation + README |
+| **Not implemented** | Live APIs, deployed operations system or verified Power BI solution |
 
 ---
 
-### 3 Courier Load Imbalance
+## Business Context
 
-**I found this:**  
+The case study is organized around these questions:
 
-- Return rate: **26%**; Delivered: **52%**; 22% unaccounted (likely in‑transit or cancelled).  
-- Some couriers are overloaded, others underutilized.  
-- High return ratio suggests **poor first‑attempt success** and **weak NDR follow‑up**.
+1. **Delivery performance:** Which shipments exceed a proposed 48-hour delivery target?
+2. **Returns:** How do return outcomes differ by payment method?
+3. **Courier workload:** Are assignments balanced across couriers?
+4. **Warehouse capacity:** Does daily dispatch volume exceed an assumed threshold?
+5. **Payment reconciliation:** Which payments are pending, paid or returned?
+6. **Customer tracking:** Which shipments remain marked in transit for unusually long periods?
 
-**Therefore I suggest:**
-
-- Implement **dynamic routing** and **workload caps** per courier.  
-- Tie incentives to **first‑attempt delivery success**.  
-- Penalize poor NDR handling.  
-- Conduct **weekly courier performance reviews** by route.
+These are analytical scenarios—not statements about actual TCS operational performance.
 
 ---
 
-### 4 Warehouse Overcapacity
+## SQL Database & Data Model
 
-**I found this:**  
+| Table | Primary key | Business purpose |
+|---|---|---|
+| `Customers` | `CustomerID` | Contact and registration records |
+| `Couriers` | `CourierID` | Courier identity, region and rating |
+| `Warehouses` | `WarehouseID` | Warehouse location, stated capacity and manager |
+| `Parcels` | `ParcelID` | Order, customer, route, dates and parcel status |
+| `Shipments` | `ShipmentID` | Parcel assignment, courier, warehouse, dispatch, arrival and shipment status |
+| `Payments` | `PaymentID` | Parcel-linked amount, payment method and status |
 
-- Designed capacity: **500 parcels/day**, but reported inflow sometimes exceeds 650.  
-- Dataset extract shows only **2 parcels/day** with zero variance — likely filtered or incomplete.  
-- No visible peaks or seasonal surges in the data.
+### Relationship diagram
 
-**Therefore I suggest:**  
+```mermaid
+erDiagram
+    Customers ||--o{ Parcels : places
+    Parcels ||--o{ Shipments : tracked_by
+    Parcels ||--o{ Payments : paid_for
+    Couriers ||--o{ Shipments : handles
+    Warehouses ||--o{ Shipments : dispatches
+```
 
-- Revalidate data extraction to include **hourly spikes** and **seasonal peaks**.  
-- Define **granular capacity thresholds** (per hour, per shift).  
-- Add **real‑time utilization dashboards**.  
-- Maintain a **20% surge buffer** and overflow partnerships.
+**Design choice:** Referential constraints connect shipments to the appropriate parcel, courier and warehouse; payments link to parcels. This helps prevent orphaned operational records.
 
----
-
-### 5 Payment Reconciliation Issues
-
-**I found this:** 
-
-- Pending payments: **Bank 25%**, **COD 27.27%**, **Card 0%** (but no completed records for any method).  
-- Indicates **no settlements recorded** during the observed period.  
-- High‑value transactions remain pending, creating **cash‑flow strain**.
-
-**Therefore I suggest:**  
-
-- Enforce **T+1 COD settlement SLAs**.  
-- Integrate **bank and payment gateway APIs** for real‑time reconciliation.  
-- Assign **method‑level ownership** for pending settlements.  
-- Audit **Card transaction mapping** to ensure completeness.
+**Limitation:** The `Shipments.Status` and `Parcels.Status` fields can disagree, since the script updates them separately. They should have documented, consistent meanings.
 
 ---
 
-### 6 Customer Complaints – Tracking Errors
+## Six Business Problems
 
-**I found this:**  
+### 1 — Delivery Delays
 
-- Six records, only three unique ShipmentIDs, all “In‑Transit” for **4+ days**.  
-- Duplicate records inflate workload metrics.  
-- Affected shipments involve **Bank and Card payments**, increasing dispute risk.
+**Question:** What portion of recorded shipments arrive after 48 hours?
 
-**Therefore I suggest:**
+**SQL approach:** Calculate elapsed hours from `DispatchDate` to `ArrivalDate`, classify deliveries against 48 hours and summarize the results.
 
-- Improve **milestone tracking** at every shipment leg.  
-- Deduplicate records in reporting dashboards.  
-- Sync operational and customer‑facing systems to prevent stale statuses.  
-- Prioritize Bank/Card shipments with **call‑ahead verification**.
+**Presentation finding:** The report discusses a **58-hour average delay** and reports **4% delayed** and **3% on time**, but these percentages do not form a complete classification and cannot be reconciled to the provided seed file without further clarification.
 
----
+**Analytical decision:** Use a clearly defined denominator for completed deliveries, classify records as `On Time`, `Delayed` or `Open`, and distinguish *average delivery duration* from *average lateness beyond SLA*.
 
-##  Actionable Insights
+**Potential action:** Monitor late dispatches and daily SLA breaches; investigate bottlenecks by hub, route and courier only after reliable status histories are available.
 
-The following targeted actions are derived from SQL‑based analysis of six critical operational challenges at the Karachi branch.  
-Each insight is directly linked to a measurable business outcome.
+### 2 — Return Rates by Payment Method
 
----
+**Question:** Are returns distributed differently across COD, Bank and Card transactions?
 
-### 1 Delivery Delays
+**SQL approach:** Join `Shipments`, `Parcels`, and `Payments`; calculate returned, delivered and other outcomes by payment method.
 
-**Insight:**  
+**Presentation findings:** Bank **31.25%**, Card **25.00%**, COD **22.73%** return rates are shown in the presentation. These are **reported findings, not independently reproduced** against the attached 25-shipment seed dataset.
 
-Average delivery time is **58 hours**, exceeding the 48‑hour SLA. Only **3%** of shipments are on‑time, with delays likely tied to hub cut‑offs and linehaul schedules.
+**Analytical decision:** Segment by payment method while preserving outcomes other than `Delivered` and `Returned`.
 
-**Action Steps:**  
+**Potential action:** Investigate return reason codes, address verification and payment confirmation; do not infer that a payment method *causes* returns from aggregate correlations.
 
-- Deploy a **real‑time SLA Monitoring Dashboard** to flag at‑risk shipments.  
-- Reschedule dispatch batches immediately after cut‑off times.  
-- Reduce weekend delays by contracting **alternate courier partners**.  
-- Standardize SLA KPI definitions for consistent reporting.
+### 3 — Courier Assignment Balance
 
----
+**Question:** How evenly are parcels assigned across available couriers?
 
-### 2 High Return Rate
+**SQL approach required:** Aggregate shipments by `CourierID`, include couriers with zero shipments using `LEFT JOIN`, and compare distributions.
 
-**Insight:**  
+**Important:** The original 'courier load imbalance' query calculates overall delivery and return percentages, **not courier-specific workloads**. Therefore the existing result does not establish imbalance.
 
-Return rates are highest for **Bank (31.25%)** and **Card (25%)** payments, compared to COD (22.73%). Indicates payment verification friction and lower customer trust in prepaid methods.
+**Potential action:** Create a courier allocation report and compare assignments, delivery outcomes and route complexity before setting workload caps.
 
-**Action Steps:**  
+### 4 — Warehouse Throughput & Capacity
 
-- Strengthen **address verification** for all orders.  
-- Tighten **payment validation** for Bank/Card transactions.  
-- Make **“reason for return”** capture mandatory in courier apps.  
-- Introduce **customer confirmation calls/SMS** before dispatch for high‑risk orders.
+**Question:** Does operational volume exceed warehouse capacity?
 
----
+**Original SQL:** Counts all shipments by dispatch date and flags counts above a constant **500**.
 
-### 3 Courier Load Imbalance
+**Presentation finding:** For 20 days, it reports **2 parcels per day** and **0 days over capacity**, despite narrative claims that daily intake may exceed 650 parcels. These are conflicting claims.
 
-**Insight:**  
+**Analytical decision:** Warehouse-specific volume must be measured per `WarehouseID`, aligned to the period and units of the `Warehouses.Capacity` field. Dispatch volume alone is not equal to *warehouse occupancy*.
 
-26% of parcels are returned, 52% delivered, and 22% unaccounted — suggesting uneven workload distribution and poor NDR follow‑up.
+**Potential action:** Add true inbound/outbound event records, stock-in-warehouse timestamps, hourly peaks and capacity definitions before claiming overcapacity.
 
-**Action Steps:** 
+### 5 — Payment Reconciliation
 
-- Implement a **Courier Load Balancing Algorithm** to evenly distribute parcels.  
-- Track courier KPIs and link incentives to **first‑attempt delivery success**.  
-- Provide targeted training to underperforming couriers.  
-- Penalize poor NDR handling to improve accountability.
+**Question:** Which payment records remain unsettled?
 
----
+**SQL approach:** Count records by `PaymentMethod` and valid `PaymentStatus` values.
 
-### 4 Warehouse Overcapacity
+**Important:** The SQL table permits `Paid`, `Pending`, and `Returned`. The original analytical query checks `Completed`, a status that is not permitted by the CHECK constraint, so its 'completed' percentage is necessarily zero for these seed records.
 
-**Insight:**  
+**Presentation finding:** It reports pending rates by method, but the percentage of completed settlements is not interpretable until status mapping is corrected.
 
-Warehouse capacity is **500 parcels/day**, but inflow often exceeds 650. Dataset extract shows flat 2 parcels/day — indicating missing surge data.
+**Potential action:** Track `Paid` separately from `Pending`, define settlement dates and reconcile cash collection with payment records.
 
-**Action Steps:**  
+### 6 — Shipment Tracking Exceptions
 
-- Use **historical shipment trends** for inflow forecasting.  
-- Create **dynamic storage zones** within the warehouse.  
-- Establish **overflow agreements** with nearby facilities.  
-- Add **hourly capacity monitoring** to detect surges early.
+**Question:** Which `In-Transit` shipments have exceeded a defined threshold without updated tracking?
+
+**SQL approach:** Filter by status, dispatch date and elapsed days.
+
+**Presentation finding:** Six rows involving three unique shipment IDs are described. This suggests duplicate reporting rows or a different record scope; the attached seed data contains **25 total shipments** and only certain shipment IDs are set `In-Transit`.
+
+**Analytical decision:** Use unique shipment IDs and a fixed analysis date when comparing historical samples. Running `GETDATE()` against January 2023 records in 2026 will create misleading 'currently late' counts.
+
+**Potential action:** Implement event-level milestone logging and flag shipments missing updates beyond policy thresholds.
 
 ---
 
-### 5 Payment Reconciliation Issues
+## SQL Analysis Highlights
 
-**Insight:**  
+The following examples reflect the supplied schema and improve on the original query logic. They are **illustrative corrected patterns**, not proof of executed results.
 
-25% of Bank and 27.27% of COD payments remain pending; no completed settlements recorded — creating cash‑flow strain.
+### A. Shipment SLA classification
 
-**Action Steps:**  
+```sql
+WITH DeliveryAudit AS (
+    SELECT
+        ShipmentID,
+        ParcelID,
+        DATEDIFF(HOUR, DispatchDate, ArrivalDate) AS ActualHours
+    FROM dbo.Shipments
+)
+SELECT
+    COUNT(*) AS AllShipments,
+    SUM(CASE WHEN ActualHours IS NOT NULL THEN 1 ELSE 0 END) AS ArrivedShipments,
+    SUM(CASE WHEN ActualHours <= 48 THEN 1 ELSE 0 END) AS OnTimeCount,
+    SUM(CASE WHEN ActualHours > 48 THEN 1 ELSE 0 END) AS DelayedCount,
+    AVG(CASE WHEN ActualHours > 48
+             THEN CAST(ActualHours - 48 AS DECIMAL(10,2))
+        END) AS AvgHoursPastSLA
+FROM DeliveryAudit;
+```
 
-- Build a **Pending Payment Tracker** with daily auto‑reconciliation.  
-- Link courier payouts to **confirmed delivery status**.  
-- Integrate **bank and payment gateway APIs** for real‑time updates.  
-- Audit Card transaction mapping to ensure completeness.
+*Here, SLA lateness excludes not-yet-arrived shipments and does not confuse total transit hours with hours past the threshold.*
+
+### B. Courier workload by person
+
+```sql
+SELECT
+    c.CourierID,
+    c.FullName,
+    c.Region,
+    COUNT(s.ShipmentID) AS AssignedShipments
+FROM dbo.Couriers AS c
+LEFT JOIN dbo.Shipments AS s
+    ON c.CourierID = s.CourierID
+GROUP BY c.CourierID, c.FullName, c.Region
+ORDER BY AssignedShipments DESC, c.CourierID;
+```
+
+*This directly measures assigned workload—the missing dimension in the original problem-three query.*
+
+### C. Warehouse dispatch volume versus stated capacity
+
+```sql
+SELECT
+    w.WarehouseID,
+    w.Location,
+    w.Capacity,
+    CAST(s.DispatchDate AS date) AS DispatchDay,
+    COUNT(s.ShipmentID) AS DailyDispatches
+FROM dbo.Warehouses AS w
+JOIN dbo.Shipments AS s
+    ON w.WarehouseID = s.WarehouseID
+GROUP BY
+    w.WarehouseID, w.Location, w.Capacity,
+    CAST(s.DispatchDate AS date)
+ORDER BY DispatchDay, w.WarehouseID;
+```
+
+*This compares dispatch counts by warehouse. It is not a direct measurement of occupancy or a capacity breach unless those units and time periods match.*
+
+### D. Payment status by method
+
+```sql
+SELECT
+    PaymentMethod,
+    COUNT(*) AS PaymentRecords,
+    SUM(CASE WHEN PaymentStatus = 'Paid' THEN 1 ELSE 0 END) AS PaidCount,
+    SUM(CASE WHEN PaymentStatus = 'Pending' THEN 1 ELSE 0 END) AS PendingCount,
+    SUM(CASE WHEN PaymentStatus = 'Returned' THEN 1 ELSE 0 END) AS ReturnedCount,
+    SUM(CASE WHEN PaymentStatus = 'Pending' THEN Amount ELSE 0 END) AS PendingAmountPKR
+FROM dbo.Payments
+GROUP BY PaymentMethod;
+```
+
+*This respects the status values actually allowed by the database.*
 
 ---
 
-### 6 Customer Complaints – Tracking Errors
+## Reported Findings & Evidence Quality
 
-**Insight:**  
+The attached presentation contains useful example findings, but some metrics should be revisited before being presented as validated results.
 
-Multiple shipments remain “In‑Transit” for **4+ days** with no updates; duplicate records inflate workload metrics.
+| Topic | Presentation statement | Verification concern |
+|---|---|---|
+| Delivery | Average delay 58 hours; delayed 4%, on-time 3% | Denominator and metric definition unclear |
+| Returns | Bank 31.25%, Card 25%, COD 22.73% | Uses a broader/changed sample than the seed file appears to contain |
+| Courier workload | 26% returned, 52% delivered | No breakdown by courier |
+| Capacity | 2 parcels/day, 0 overcapacity days | Conflicts with narrative of 500–650+ parcel throughput |
+| Payments | 0% completed | `Completed` is not a valid status in schema |
+| Tracking | Six records for three shipments | Repetition and sample mismatch require investigation |
 
-**Action Steps:**  
+**What can be stated confidently from the script:** it defines six tables, relational foreign keys, sample inserts, and six named analysis queries. The supplied seed blocks include 25 records per table, while subsequent updates reference shipment IDs 26–50 without corresponding INSERT statements in the uploaded SQL.
 
-- Improve **milestone tracking** across all shipment legs.  
-- Deduplicate shipment records in dashboards.  
-- Launch a **real‑time customer tracking portal**.  
-- Auto‑escalate shipments stuck “In‑Transit” beyond 3 days.
-
----
-
-##  Expected Impact
-
-- **On‑Time Delivery:** +20% improvement  
-- **Return Rate:** Reduced from 26% to <15%  
-- **Courier Efficiency:** >85% first‑attempt success  
-- **Pending Payments:** Reduced to <5%  
-- **Customer Complaints:** 50%+ reduction
-
-
-##  Conclusion
-
-This project analyzed the operational performance of the **TCS Logistics – Karachi Branch** using SQL‑driven analytics.  
-
-By breaking down six critical business problems — **delivery delays**, **high return rates**, **courier load imbalance**, **warehouse overcapacity**, **payment reconciliation issues**, and **customer complaints** — raw shipment and transaction data was transformed into **actionable business intelligence**.
-
-The findings revealed systemic inefficiencies such as:
-
-- Missed SLAs and multi‑day delivery delays.
-- High return ratios, especially for Bank and Card payments.
-- Uneven courier workload distribution.
-- Lack of accurate warehouse capacity tracking.
-- Significant pending payments with no recorded settlements.
-- Tracking inconsistencies leading to customer dissatisfaction.
-
-Through **data‑backed interpretations** and **targeted recommendations**, the project proposed interventions including:
-
-- SLA monitoring dashboards and “at‑risk shipment” alerts.
-- Return reduction strategies via address validation and NDR handling.
-- Courier workload balancing algorithms.
-- Warehouse surge planning and overflow partnerships.
-- Automated payment reconciliation frameworks.
-- Improved milestone tracking and data hygiene.
-
-If implemented, these solutions would:
-
-- Improve customer satisfaction.
-- Strengthen financial control and cash flow.
-- Optimize resource utilization.
-- Reduce operational costs.
-- Position the Karachi branch as a more reliable and competitive logistics hub within the TCS network.
+**What cannot yet be claimed:** actual reduced delays, fewer returns, improved courier utilization, warehouse overcapacity, faster financial settlement or confirmed operational gains for TCS Karachi.
 
 ---
 
-##  Future Scope
+## Data Quality Audit
 
-While this project addressed six core operational challenges, there is significant potential to extend the analysis and build a **comprehensive logistics optimization framework**.  
-Future enhancements may include:
+The review identified several actionable engineering issues:
 
-1. **Predictive Analytics**
-   
-   - Use machine learning models to forecast delivery delays, return likelihood, and payment default risks before they occur.
+- **Script execution:** Plain text headings beginning `===` are not SQL comments. Replace with `--` or block comments.
+- **Order of operations:** Queries against `Parcels` and `Payments` appear before their `CREATE TABLE` statements; a clean first execution would fail at those lines.
+- **Multiple executions:** The script creates the database and tables without idempotent guards; rerunning from the top may fail.
+- **Nonexistent shipment IDs:** Updates reference IDs **26–50**, but the visible INSERT block contains only 25 shipments.
+- **Status inconsistency:** `Parcels.Status` may differ from later `Shipments.Status` assignments.
+- **Payment status mismatch:** The query uses `Completed` where the table permits `Paid`.
+- **Data grain:** Courier workload requires courier-level grouping, while true warehouse occupancy requires inventory/event data.
+- **Dynamic date logic:** Using today's date with a historical demonstration dataset makes elapsed-time alerts unreliable.
+- **Presentation reconciliation:** Some slide results cannot be reproduced directly from the supplied source script.
 
-3. **Real‑Time Dashboards**
-   
-   - Develop Power BI dashboards integrated with live data streams for proactive monitoring and decision‑making.
+### Validation plan
 
-5. **Customer Behavior Analysis**
-   
-   - Mine customer‑level data to segment profiles, understand buying patterns, and predict repeat returns.
+- [ ] Execute the schema and inserts in a clean test database.
+- [ ] Check table row counts and foreign-key integrity.
+- [ ] Resolve parcel/shipment status definitions.
+- [ ] Correct all invalid SQL headings and misplaced SELECT statements.
+- [ ] Remove or document references to nonexistent shipment IDs.
+- [ ] Re-run the six analyses with explicit denominators.
+- [ ] Compare new outputs with the slides and update the findings.
+- [ ] Add actual SQL result screenshots where they improve evidence.
 
-7. **Advanced Route Optimization**
-    
-   - Incorporate geospatial analytics to optimize courier routes, reduce mileage, and improve first‑attempt delivery success.
+---
 
-9. **Financial Automation**
-    
-   - Automate COD and Bank reconciliation with direct API integrations to reduce pending cases and improve cash flow.
+## Recommendations & Prioritization
 
-11. **Scalability Testing**
-    
-   - Stress‑test warehouse and courier capacity against peak seasonal loads (Eid, sales events, promotions) to ensure resilience.
+| Priority | Improvement | Why it matters | Proposed metric |
+|---|---|---|---|
+| 1 | Standardize statuses and SLA definitions | Prevents misleading delivery KPIs | On-time % among arrived shipments |
+| 1 | Repair payment reconciliation logic | Distinguishes pending from paid/returned | Pending count and amount |
+| 1 | Validate source completeness | Prevents inflated or missing results | Record reconciliation by table |
+| 2 | Analyze workload per courier | Identifies uneven assignments | Shipments per courier |
+| 2 | Measure actual warehouse occupancy | Separates dispatch volume from storage strain | Peak occupancy / capacity |
+| 2 | Implement shipment milestone history | Identifies stale tracking records | Time since last status update |
+| 3 | Expand return reason data | Supports more precise interventions | Returns by documented reason |
 
-By expanding into these areas, the Karachi branch can move from **reactive problem‑solving** to **proactive performance optimization**, creating a sustainable competitive advantage for TCS.
+These are **recommendations**, not deployed improvements or realized financial benefits.
+
+---
+
+## Technology & Skills
+
+**Core technology:** SQL Server / T-SQL  
+**Database development:** relational tables, primary keys, foreign keys, `CHECK` constraints, `IDENTITY` fields  
+**Analytical SQL:** `JOIN`, `COUNT`, `SUM`, `AVG`, `CASE`, `GROUP BY`, `DATEDIFF`, `STRING_AGG`  
+**Problem solving:** shipment-SLA analysis, returns segmentation, courier assignment analysis, settlement exceptions  
+**Analytical rigor:** grain consistency, metric definition, data quality, reproducibility and evidence review
+
+> Although the PDF discusses future Power BI dashboards, the delivered source material is a **SQL case study**. The visualization on the PDF is an illustrative presentation dashboard, not evidence of an implemented Power BI `.pbix` report.
+
+---
+
+## Repository Files
+
+| File | Description |
+|---|---|
+| `README.md` | Recruiter-oriented project documentation and methodology |
+| `TCS_Karachi_Original.sql` | Original uploaded SQL script, preserved as supplied |
+| `TCS_Karachi_Case_Study.pdf` | Original 24-page case study presentation |
+| `TCS_Karachi_Banner.png` | Designed cover illustration for presentation use |
+
+**Banner workflow:** You can drag the banner into the GitHub `README.md` editor and GitHub will generate a hosted image link. There is no need to create an `assets` folder if you use that workflow.
+
+---
+
+## Future Development
+
+1. **Reproducible SQL script:** create a clean, idempotent setup and validated seed dataset.
+2. **Operational data layer:** store shipment milestone events and courier assignment history.
+3. **Financial audit:** model settlement dates and cash remittance reconciliation.
+4. **Warehouse monitoring:** capture inbound/outbound volumes and occupancy by shift.
+5. **Optional Power BI phase:** create a real report after measures have been validated.
+6. **Performance testing:** simulate peak demand to test database and operational KPIs.
+
+---
+
+<div align="center">
+
+### About the Analyst
+
+**Khurram Naveed**  
+Data Analyst | SQL Server | Business Intelligence
+
+[![GitHub](https://img.shields.io/badge/GitHub-khurraminsights-181717?style=for-the-badge&logo=github)](https://github.com/khurraminsights)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/khurram-naveed-0083851aa/)
+
+**From relational data to reliable logistics decisions.**
+
+</div>
+
