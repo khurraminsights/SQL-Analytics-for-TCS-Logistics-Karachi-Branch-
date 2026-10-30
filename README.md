@@ -3,6 +3,8 @@
 # TCS Logistics — Karachi Branch
 ### Operational Performance Optimization with SQL Server
 
+<img width="1983" height="793" alt="TCS_Karachi_Banner (1)" src="https://github.com/user-attachments/assets/137a7b89-443f-4633-89f9-9ee87f982b67" />
+
 **Delivery SLA · Returns · Courier Workload · Warehouse Capacity · Payment Reconciliation · Shipment Tracking**
 
 ![SQL Server](https://img.shields.io/badge/SQL_Server-T--SQL-CC2927?style=for-the-badge)
